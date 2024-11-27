@@ -4,7 +4,7 @@ template.innerHTML = `
 <nav class="top">
     <a class="logo"  target="_self" >
       <!-- <p class="logo-font">D I E T E V E N T</p> -->
-      <img alt="" src="img/diet-logo.png" >
+      <img id="diet-logo" alt="" src="img/diet-logo.png" >
     
     </a>
     <div class="menu-btn">
