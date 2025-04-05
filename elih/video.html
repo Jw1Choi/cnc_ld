@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>section3 Popup Example</title>
+  <style>
+    @font-face {
+      font-family: 'Paperlogy-8ExtraBold';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+      font-weight: 100;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Cafe24Ssurround';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+    .contents {
+      font-family: 'Paperlogy-8ExtraBold';
+    }
+    .intro {
+      text-align:-webkit-center;
+      background: #ff7c11;
+      color:#fff;
+      font-size:40px;
+      padding:50px 0;
+      font-family: 'Paperlogy-8ExtraBold';
+      letter-spacing: 1px;
+      line-height:120%;
+    }
+    @media screen and (max-width:700px) {
+      .intro {font-size:180%;}
+    }
+
+    /* -----------------------------------------------------------
+       기존 section3 스타일
+    ----------------------------------------------------------- */
+    .section3 .wrap1 {width:100%; margin:0 auto;}
+    .section3 .main_title {
+      font-size:3rem; color:#4e4e4e; font-family: 'GmarketSans';
+      font-weight:700; line-height: 120%;
+    }
+    .section3 .yellow {color:#f9eda7;}
+    .section3 .green {color:#726c0b;}
+    .section3 .blue {color:#345bd7;}
+    .section3 .red {color:#ee0000;}
+    .section3 .white {color:#fff;}
+    .section3 .center {text-align: center; margin-bottom:3.75rem;}
+
+    .section3 {
+      padding:6.25rem 0; box-sizing: border-box;
+      background:#0073b6; background-repeat: no-repeat;
+      background-position: center; background-size: cover;
+      text-align:-webkit-center;
+    }
+    .section3 .content {
+      padding:2.5rem 0; box-sizing: border-box;
+      background-color: #fff; border-radius: 1.25rem;
+      overflow: hidden; width:98%;
+      margin:1rem auto; /* 간격 부여용 */
+    }
+    .section3 .content2 {margin-top:2.5rem;}
+
+    /* -----------------------------------------------------------
+       팝업(오버레이) + 유튜브 반응형 스타일
+    ----------------------------------------------------------- */
+    /* 전체 화면을 덮는 반투명 오버레이 */
+    .popup-overlay {
+      display: none;         /* 초기에 숨김 */
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+    }
+    /* 팝업 컨테이너 */
+    .popup-content {
+      position: relative;
+      width: 80%;          /* 팝업 너비 (화면 80%) */
+      max-width: 800px;    /* 최대 너비 */
+      margin: 50px auto;   /* 수직 간격 */
+      background: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+      border-radius: 10px;
+    }
+
+    /* 닫기 버튼을 영상/이미지 위에 배치 */
+    .popup-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 999;     /* 위에 표시되도록 */
+      cursor: pointer;
+      font-size: 1.3rem;
+      font-weight: bold;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 5px;
+    }
+
+    /* (A) 영상이 들어갈 래퍼 (16:9 반응형) */
+    .videoWrapper {
+      display: none;       /* 기본 숨김, video-type일 때만 보임 */
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 비율 */
+      height: 0;
+      background: #000;
+    }
+    .videoWrapper iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* (B) 텍스트/이미지가 들어갈 래퍼 */
+    .htmlContent {
+      display: none; /* 기본 숨김, html-type일 때만 보임 */
+    }
+
+    /* -----------------------------------------------------------
+       이미지 hover 시 살짝 확대
+    ----------------------------------------------------------- */
+    .section3 .content img {
+      transition: transform 0.3s ease;
+    }
+    .section3 .content img:hover {
+      transform: scale(1.05); /* 살짝 확대 */
+    }
+
+  </style>
+</head>
+<body>
+  <article class="section3">
+    <div class="wrap1">
+      <h2 class="main_title center up-on-scroll" style="color:#fff; line-height:120%;">
+        먼저 경험한<br>학부모님들의 후기
+        <span class="blue"></span>
+      </h2>
+
+      <!-- 1) 첫 번째 이미지: YouTube 팝업 -->
+      <div class="content">
+        <img 
+          src="./img/hg1-1.png" 
+          alt="영상1"
+          style="width:100%"
+          data-type="video"  <!-- 팝업 타입: 비디오 -->
+          data-content="https://www.youtube.com/embed/HUXRzwgMGDw" 
+          onclick="openPopup(this)"
+        />
+      </div>
+
+      <!-- 2) 두 번째 이미지: YouTube 팝업 -->
+      <div class="content content2">
+        <img 
+          src="./img/hg2-1.png" 
+          alt="영상2"
+          style="width:100%"
+          data-type="video"  <!-- 팝업 타입: 비디오 -->
+          data-content="https://www.youtube.com/embed/aS2r8t0ayi8"
+          onclick="openPopup(this)"
+        />
+      </div>
+
+      <!-- 3) 세 번째 이미지: 문구+이미지 (HTML) 팝업 -->
+      <div class="content content2">
+        <img 
+          src="./img/hh3.png" 
+          alt="이미지+문구 팝업 예시1"
+          style="width:100%"
+          data-type="html"  <!-- 팝업 타입: HTML -->
+          data-content="
+            <h2>이것은 문구+이미지 팝업입니다</h2>
+            <p>팝업 내에 원하는 문장과 이미지를 넣을 수 있어요!</p>
+            <img src='./img/sample_popup_img.png' alt='샘플이미지' style='max-width:100%;'/>
+          "
+          onclick="openPopup(this)"
+        />
+      </div>
+
+      <!-- 4) 네 번째 이미지: 문구+이미지 (HTML) 팝업 -->
+      <div class="content content2">
+        <img 
+          src="./img/hh4.png" 
+          alt="이미지+문구 팝업 예시2"
+          style="width:100%"
+          data-type="html"  
+          data-content="
+            <h2>팝업 예시2</h2>
+            <p>원하는 HTML을 마음껏 넣을 수 있습니다.</p>
+            <img src='./img/popup_illust.png' alt='일러스트 예시' style='max-width:100%;'/>
+          "
+          onclick="openPopup(this)"
+        />
+      </div>
+      
+    </div>
+  </article>
+
+  <!-- 팝업 오버레이 (배경 클릭 시 닫힘) -->
+  <div 
+    id="popupOverlay" 
+    class="popup-overlay"
+    onclick="overlayClick(event)"
+  >
+    <!-- 팝업 콘텐츠 (영상/HTML) -->
+    <div class="popup-content" onclick="event.stopPropagation();">
+      <span class="popup-close" onclick="closePopup()">X</span>
+      
+      <!-- (A) 영상용 래퍼 -->
+      <div class="videoWrapper" id="videoWrapper">
+        <iframe 
+          id="popupIframe"
+          src=""
+          frameborder="0"
+          allowfullscreen
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        ></iframe>
+      </div>
+
+      <!-- (B) HTML 컨텐츠용 래퍼 -->
+      <div class="htmlContent" id="htmlWrapper">
+        <!-- 동적으로 내용 삽입 -->
+        <div id="htmlContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openPopup(imgElem) {
+      const overlay = document.getElementById('popupOverlay');
+      const videoWrapper = document.getElementById('videoWrapper');
+      const htmlWrapper = document.getElementById('htmlWrapper');
+      const htmlContainer = document.getElementById('htmlContainer');
+      const iframe = document.getElementById('popupIframe');
+
+      // 클릭한 이미지에서 data 추출
+      const popupType = imgElem.dataset.type;      // "video" or "html"
+      const content = imgElem.dataset.content;     // iframe src or HTML string
+
+      // 먼저, 모든 래퍼 초기화
+      videoWrapper.style.display = 'none';
+      htmlWrapper.style.display = 'none';
+      iframe.src = ''; 
+      htmlContainer.innerHTML = '';
+
+      // 팝업 타입에 따라 분기 처리
+      if (popupType === 'video') {
+        // 영상 모드
+        videoWrapper.style.display = 'block';
+        iframe.src = content;
+      } else if (popupType === 'html') {
+        // HTML(문구+이미지) 모드
+        htmlWrapper.style.display = 'block';
+        htmlContainer.innerHTML = content;
+      }
+
+      // 팝업 보이기
+      overlay.style.display = 'block';
+    }
+
+    function overlayClick(event) {
+      // 배경을 클릭한 경우에만 팝업 닫기
+      if (event.target.id === 'popupOverlay') {
+        closePopup();
+      }
+    }
+
+    function closePopup() {
+      const overlay = document.getElementById('popupOverlay');
+      const iframe = document.getElementById('popupIframe');
+      const htmlContainer = document.getElementById('htmlContainer');
+
+      // 팝업 닫힐 때 영상 재생 중단 / HTML 초기화
+      iframe.src = '';
+      htmlContainer.innerHTML = '';
+
+      overlay.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
